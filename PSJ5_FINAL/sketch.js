@@ -11,17 +11,18 @@ let dx = 5;
 let dy = 6;
 let sqSize = 50;
 let sqColor;
-
+let color1 = color(255, 0, 200);
+let color2 = color(200, 0, 250);
+let color3 = color(255, 255, 0);
+let color4 = (0, 255, 255);
 
 function setup() {
-  background(0,0,0);
   createCanvas(windowWidth,windowHeight);
-  sqColor = color(0,255,255);
+  sqColor = color(0, 255, 200);
 }
 
 function draw() {
   handleKeys();
-  noStroke();
   drawSquare();
   moveSquare();
   bounceOff();
@@ -91,6 +92,6 @@ function mouseWheel(event) {
 
 function handleKeys() {
   if (keyIsDown(13)) { 
-    sqColor = random(0, 255);
+    sqColor = random(100, 255);
   }
 }
