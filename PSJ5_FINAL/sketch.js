@@ -14,7 +14,7 @@ let sqColor;
 
 
 function setup() {
-  background(200);
+  background(0,0,0);
   createCanvas(windowWidth,windowHeight);
   sqColor = color(0,255,255);
 }
