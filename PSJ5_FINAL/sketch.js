@@ -11,17 +11,14 @@ let dx = 5;
 let dy = 6;
 let sqSize = 50;
 let sqColor;
-let color1 = color(255, 0, 200);
-let color2 = color(200, 0, 250);
-let color3 = color(255, 255, 0);
-let color4 = (0, 255, 255);
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
-  sqColor = color(0, 255, 200);
+  sqColor = color(200, 0, 255);
 }
 
 function draw() {
+  background("black");
   handleKeys();
   drawSquare();
   moveSquare();
@@ -49,7 +46,7 @@ function bounceOff() {
   // bounce off left wall
   else if (x <= 0) {
     dx *= -1;
-    sqColor = color(0, 255, 255);
+    sqColor = color(200, 0, 250);
     x = 1;
   } 
 
@@ -64,7 +61,7 @@ function bounceOff() {
   // bounce off top wall
   if (y <= 0) {
     dy *= -1;
-    sqColor = color(200, 0, 250);
+    sqColor = color(0, 255, 255);
     y = 1;
   } 
 }
