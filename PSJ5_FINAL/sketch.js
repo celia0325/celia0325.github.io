@@ -61,7 +61,7 @@ function bounceOff() {
   // bounce off top wall
   if (y <= 0) {
     dy *= -1;
-    sqColor = color(20,100,250);
+    sqColor = color(20, 100, 250);
     y = 1;
   } 
 }
