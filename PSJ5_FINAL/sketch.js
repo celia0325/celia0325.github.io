@@ -39,6 +39,7 @@ function bounceOff() {
 // bounce off right wall
   if (x >= width - sqSize) {
     dx *= -1;
+    sqColor = color(0,255,200);
     //don't get caught in wall
     x = width - sqSize - 1;
   } 
@@ -46,18 +47,21 @@ function bounceOff() {
   else if (x <= 0) {
     dx *= -1;
     x = 1;
+    sqColor = color(200, 0, 255);
   } 
 
   // y
   //bounce off bottom wall
   if (y >= height - sqSize) {
     dy *= -1;
+    sqColor = color(200,200,0);
     y = height - sqSize - 1;
   } 
 
   // bounce off top wall
   if (y <= 0) {
     dy *= -1;
+    sqColor = color(20,100,250);
     y = 1;
   } 
 }
