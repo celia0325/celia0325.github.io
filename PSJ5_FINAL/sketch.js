@@ -39,14 +39,12 @@ function bounceOff() {
 // bounce off right wall
   if (x >= width - sqSize) {
     dx *= -1;
-    sqColor = color(255, 0, 200);
     //don't get caught in wall
     x = width - sqSize - 1;
   } 
   // bounce off left wall
   else if (x <= 0) {
     dx *= -1;
-    sqColor = color(200, 0, 250);
     x = 1;
   } 
 
@@ -54,14 +52,12 @@ function bounceOff() {
   //bounce off bottom wall
   if (y >= height - sqSize) {
     dy *= -1;
-    sqColor = color(255, 255, 0);
     y = height - sqSize - 1;
   } 
 
   // bounce off top wall
   if (y <= 0) {
     dy *= -1;
-    sqColor = color(0, 255, 255);
     y = 1;
   } 
 }
@@ -73,22 +69,19 @@ function mouseClicked() {
   }
 }
 
-function mouseWheel(event) {
-  if (event.delta < 0) {
-    if (sqSize < height *0.75 && 
-        sqSize < width *0.75) {
-      sqSize +=5;
+function handleKeys() {
+  if (keyIsDown(38)) { 
+    if (sqSize < height *0.75 && sqSize < width *0.75) {
+      sqSize +=1;
     }
   }
-  else {
-    if (sqSize > 10) {
-      sqSize -= 5;
-    } 
-  }
+  if (keyIsDown(40)) { 
+    if (sqSize < height *0.75 && sqSize < width *0.75) {
+      sqSize -=1;
+    }
+  }  
 }
 
-function handleKeys() {
-  if (keyIsDown(13)) { 
-    sqColor = random(100, 255);
-  }
+function windowResized() {
+  resizeCanvas(windowWidth,windowHeight);
 }
