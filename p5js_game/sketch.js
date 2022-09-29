@@ -39,8 +39,8 @@ function draw() {
     circle(bullet.x, bullet.y, circleSize/5);
   }
 
-   // draw enemies
-   for (let enemy of enemies) {
+  // draw enemies
+  for (let enemy of enemies) {
     enemy.y += 2;
     fill("white");
     rect(enemy.x, enemy.y, enemySize);
@@ -50,7 +50,7 @@ function draw() {
       enemies.splice(enemies.indexOf(enemy), 1);
       lives -= 1;
       if (lives === 0) {
-        textSize(40)
+        textSize(40);
         text("You Lose!", width/3, height/2);
         noLoop();
       }
@@ -98,7 +98,7 @@ function spawnEnemies() {
   let enemy = {
     x: random(enemySize, width - enemySize),
     y: random(-2*height, 0),
-  }
+  };
   enemies.push(enemy);
 }
 
@@ -115,11 +115,11 @@ function handleKeys() {
 
 function keyTyped() {
   // lets player shoot
-  if (key === 'a') { 
+  if (key === "a") { 
     let bullet = {
       x : x+1,
       y : height - 1.5*circleSize
-    }
-    bullets.push(bullet)
+    };
+    bullets.push(bullet);
   }
 }
