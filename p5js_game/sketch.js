@@ -9,6 +9,8 @@
 let bullets = [];
 let enemies = [];
 let enemySize = 20;
+let alienImage;
+
 let score = 0;
 let lives = 3;
 
@@ -17,8 +19,13 @@ let circleSpeed = 7;
 let x = circleSize;
 let y = height - circleSize;
 
+function preload() {
+  alienImage = loadImage("alien.jpg");
+}
+
 function setup() {
-  createCanvas(600, windowHeight);
+  createCanvas(800, windowHeight);
+  imageMode(CENTER);
   createEnemies();
 }
 
@@ -43,7 +50,7 @@ function draw() {
   for (let enemy of enemies) {
     enemy.y += 2;
     fill("white");
-    rect(enemy.x, enemy.y, enemySize);
+    image(alienImage, enemy.x, enemy.y, 20, 40, enemySize);
     
     // if 3 enemies pass player; player loses
     if (enemy.y > height) {
