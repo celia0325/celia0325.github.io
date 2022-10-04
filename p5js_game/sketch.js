@@ -10,17 +10,21 @@ let bullets = [];
 let enemies = [];
 let enemySize = 20;
 let alienImage;
+let playerImage;
+let laserImage;
 
 let score = 0;
 let lives = 3;
 
-let circleSize = 50;
-let circleSpeed = 7;
-let x = circleSize;
-let y = height - circleSize;
+let playerSize = 50;
+let playerSpeed = 7;
+let x = playerSize;
+let y = height - playerSize;
 
 function preload() {
-  alienImage = loadImage("alien.png");
+  alienImage = loadImage("ufo.png");
+  playerImage = loadImage("player.png");
+  laserImage = loadImage("laser.png");
 }
 
 function setup() {
@@ -34,7 +38,7 @@ function draw() {
   rectMode(CENTER);
   
   // draws player
-  drawCircle();
+  image(playerImage, x, height - playerSize, playerSize, 100);
 
   // controls player movement
   handleKeys();
@@ -42,15 +46,14 @@ function draw() {
   // draws bullet
   for (let bullet of bullets) {
     bullet.y -= 5;
-    fill("red");
-    circle(bullet.x, bullet.y, circleSize/5);
+    image(laserImage, bullet.x, bullet.y, 10, 20);
   }
 
   // draw enemies
   for (let enemy of enemies) {
     enemy.y += 2;
     fill("white");
-    image(alienImage, enemy.x, enemy.y, 20, 40, enemySize);
+    image(alienImage, enemy.x, enemy.y, 90, 70, enemySize);
     
     // if 3 enemies pass player; player loses
     if (enemy.y > height) {
@@ -85,14 +88,6 @@ function draw() {
   text(lives, 580, 35);
 }
 
-
-function drawCircle() {
-  //creates player
-  fill("violet");
-  noStroke();
-  circle(x, height - circleSize, circleSize);
-}
-
 function createEnemies() {
   // repeats creation of enemies
   for(let i = 0; i < 5; i += 1) {
@@ -104,19 +99,19 @@ function spawnEnemies() {
   // creates and places enemies
   let enemy = {
     x: random(enemySize, width - enemySize),
-    y: random(-2*height, 0),
+    y: random(-1.1*height, 0),
   };
   enemies.push(enemy);
 }
 
 function handleKeys() {
   // player moves to the right when right arrow is down
-  if (keyIsDown(39)&& x < width - circleSize/2) { 
-    x += circleSpeed;
+  if (keyIsDown(39)&& x < width - playerSize/2) { 
+    x += playerSpeed;
   }
   // player moves to the left when left arrow is down
-  if (keyIsDown(37)&& x > 0 + circleSize/2) { 
-    x -= circleSpeed;
+  if (keyIsDown(37)&& x > 0 + playerSize/2) { 
+    x -= playerSpeed;
   }
 }
 
@@ -125,7 +120,7 @@ function keyTyped() {
   if (key === "a") { 
     let bullet = {
       x : x+1,
-      y : height - 1.5*circleSize
+      y : height - 1.5*playerSize
     };
     bullets.push(bullet);
   }
