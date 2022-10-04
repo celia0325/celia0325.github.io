@@ -20,7 +20,7 @@ let x = circleSize;
 let y = height - circleSize;
 
 function preload() {
-  alienImage = loadImage("alien.jpg");
+  alienImage = loadImage("alien.png");
 }
 
 function setup() {
