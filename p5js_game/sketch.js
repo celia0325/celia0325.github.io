@@ -10,14 +10,19 @@ let bullets = [];
 let enemies = [];
 let enemySize = 20;
 
-let alienImage;
 let playerImage;
+let alienImage;
 let laserImage;
+let explosionImage;
+
+let dead;
+let alive;
 
 let cnv;
 
 let score = 0;
 let lives = 3;
+let time = 1000;
 
 let playerSize = 50;
 let playerSpeed = 7;
@@ -26,8 +31,10 @@ let y = height - playerSize;
 
 function preload() {
   alienImage = loadImage("ufo.png");
+  explosionImage = loadImage("explosion");
   playerImage = loadImage("player.png");
   laserImage = loadImage("laser.png");
+  explosionImage = loadImage("explosion.png");
 }
 
 function centerCanvas() {
@@ -49,6 +56,8 @@ function windowResized() {
 }
 
 function draw() {
+  let dead = image(explosionImage, enemy.x, enemy.y, 90, 70,);
+
   background(10, 10, 50);
   rectMode(CENTER);
   
@@ -67,7 +76,7 @@ function draw() {
   // draw enemies
   for (let enemy of enemies) {
     enemy.y += 2;
-    image(alienImage, enemy.x, enemy.y, 90, 70, enemySize);
+    image(alive, enemy.x, enemy.y, 90, 70, enemySize);
     
     // if 3 enemies pass player; player loses
     if (enemy.y > height) {
@@ -85,8 +94,9 @@ function draw() {
   for (let enemy of enemies) {
     for(let bullet of bullets) {
       if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 20) {
-          enemies.splice(enemies.indexOf(enemy), 1);
-          bullets.splice(bullets.indexOf(bullet), 1);
+        enemies.splice(enemies.indexOf(enemy), 1);
+        bullets.splice(bullets.indexOf(bullet), 1);
+
         spawnEnemies();
         // adds to score
         score += 1;    
@@ -140,7 +150,3 @@ function keyTyped() {
     bullets.push(bullet);
   }
 }
-
-
-
-
