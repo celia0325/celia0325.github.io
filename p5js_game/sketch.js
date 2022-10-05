@@ -13,7 +13,6 @@ let enemySize = 20;
 let alienImage;
 let playerImage;
 let laserImage;
-let backImage;
 
 let cnv;
 
@@ -29,7 +28,6 @@ function preload() {
   alienImage = loadImage("ufo.png");
   playerImage = loadImage("player.png");
   laserImage = loadImage("laser.png");
-  backImage = loadImage("starry.webp")
 }
 
 function centerCanvas() {
