@@ -9,9 +9,13 @@
 let bullets = [];
 let enemies = [];
 let enemySize = 20;
+
 let alienImage;
 let playerImage;
 let laserImage;
+let backImage;
+
+let cnv;
 
 let score = 0;
 let lives = 3;
@@ -25,16 +29,29 @@ function preload() {
   alienImage = loadImage("ufo.png");
   playerImage = loadImage("player.png");
   laserImage = loadImage("laser.png");
+  backImage = loadImage("starry.webp")
+}
+
+function centerCanvas() {
+  let w = (windowWidth - width) / 2;
+  let h = windowHeight/100 -10;
+  cnv.position(w, h);
 }
 
 function setup() {
-  createCanvas(800, windowHeight);
+  cnv = createCanvas(600, windowHeight);
+  centerCanvas();
   imageMode(CENTER);
   createEnemies();
 }
 
+function windowResized() {
+  centerCanvas();
+  resizeCanvas(600, windowHeight);
+}
+
 function draw() {
-  background(0);
+  background(10, 10, 50);
   rectMode(CENTER);
   
   // draws player
@@ -52,7 +69,6 @@ function draw() {
   // draw enemies
   for (let enemy of enemies) {
     enemy.y += 2;
-    fill("white");
     image(alienImage, enemy.x, enemy.y, 90, 70, enemySize);
     
     // if 3 enemies pass player; player loses
@@ -60,8 +76,8 @@ function draw() {
       enemies.splice(enemies.indexOf(enemy), 1);
       lives -= 1;
       if (lives === 0) {
-        textSize(40);
-        text("You Lose!", width/3, height/2);
+        textSize(30);
+        text("Oh No! The aliens invaded", width/5, height/2);
         noLoop();
       }
     }
@@ -71,8 +87,8 @@ function draw() {
   for (let enemy of enemies) {
     for(let bullet of bullets) {
       if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 20) {
-        enemies.splice(enemies.indexOf(enemy), 1);
-        bullets.splice(bullets.indexOf(bullet), 1);
+          enemies.splice(enemies.indexOf(enemy), 1);
+          bullets.splice(bullets.indexOf(bullet), 1);
         spawnEnemies();
         // adds to score
         score += 1;    
@@ -82,10 +98,11 @@ function draw() {
 
   // score and number of lives on screen
   textSize(20);
+  fill(255);
   text("Score:", 15, 35);
   text(score, 80, 35);
-  text("Lives:", 515, 35);
-  text(lives, 580, 35);
+  text("Lives:", width - 85, 35);
+  text(lives, width-20, 35);
 }
 
 function createEnemies() {
@@ -125,3 +142,7 @@ function keyTyped() {
     bullets.push(bullet);
   }
 }
+
+
+
+
