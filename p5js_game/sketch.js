@@ -8,21 +8,19 @@
 
 let bullets = [];
 let enemies = [];
-let enemySize = 20;
+
+let enemySize = 20
 
 let playerImage;
 let alienImage;
 let laserImage;
 let explosionImage;
 
-let dead;
-let alive;
-
 let cnv;
 
 let score = 0;
 let lives = 3;
-let time = 1000;
+let i = 500;
 
 let playerSize = 50;
 let playerSpeed = 7;
@@ -31,7 +29,6 @@ let y = height - playerSize;
 
 function preload() {
   alienImage = loadImage("ufo.png");
-  explosionImage = loadImage("explosion");
   playerImage = loadImage("player.png");
   laserImage = loadImage("laser.png");
   explosionImage = loadImage("explosion.png");
@@ -39,7 +36,7 @@ function preload() {
 
 function centerCanvas() {
   let w = (windowWidth - width) / 2;
-  let h = windowHeight/100 -10;
+  let h = windowHeight/100 - 10;
   cnv.position(w, h);
 }
 
@@ -56,8 +53,6 @@ function windowResized() {
 }
 
 function draw() {
-  let dead = image(explosionImage, enemy.x, enemy.y, 90, 70,);
-
   background(10, 10, 50);
   rectMode(CENTER);
   
@@ -75,8 +70,8 @@ function draw() {
 
   // draw enemies
   for (let enemy of enemies) {
-    enemy.y += 2;
-    image(alive, enemy.x, enemy.y, 90, 70, enemySize);
+      enemy.y += 3;
+      image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
     
     // if 3 enemies pass player; player loses
     if (enemy.y > height) {
@@ -84,7 +79,7 @@ function draw() {
       lives -= 1;
       if (lives === 0) {
         textSize(30);
-        text("Oh No! The aliens invaded", width/5, height/2);
+        text("Oh No! The aliens invaded!", width/5, height/2);
         noLoop();
       }
     }
@@ -93,13 +88,14 @@ function draw() {
   // makes enemies and bullet disappear after they've collided 
   for (let enemy of enemies) {
     for(let bullet of bullets) {
-      if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 20) {
+      if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
         enemies.splice(enemies.indexOf(enemy), 1);
         bullets.splice(bullets.indexOf(bullet), 1);
+        image(explosionImage, enemy.x,enemy.y, 110,90);
 
         spawnEnemies();
         // adds to score
-        score += 1;    
+        score += 10;    
       }
     }
   }
@@ -114,11 +110,11 @@ function draw() {
 }
 
 function createEnemies() {
-  // repeats creation of enemies
-  for(let i = 0; i < 5; i += 1) {
+  for(let spawns = 0; spawns < 5; spawns += 1) {
     spawnEnemies();
   }
 }
+
 
 function spawnEnemies() {
   // creates and places enemies
@@ -142,7 +138,7 @@ function handleKeys() {
 
 function keyTyped() {
   // lets player shoot
-  if (key === "a") { 
+  if (key === " ") { 
     let bullet = {
       x : x+1,
       y : height - 1.5*playerSize
