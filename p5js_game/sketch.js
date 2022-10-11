@@ -9,12 +9,13 @@
 let bullets = [];
 let enemies = [];
 
-let enemySize = 20
+let enemySize = 20;
 
 let playerImage;
 let alienImage;
 let laserImage;
 let explosionImage;
+let startImage;
 
 let cnv;
 
@@ -27,18 +28,8 @@ let playerSpeed = 7;
 let x = playerSize;
 let y = height - playerSize;
 
-function preload() {
-  alienImage = loadImage("ufo.png");
-  playerImage = loadImage("player.png");
-  laserImage = loadImage("laser.png");
-  explosionImage = loadImage("explosion.png");
-}
-
-function centerCanvas() {
-  let w = (windowWidth - width) / 2;
-  let h = windowHeight/100 - 10;
-  cnv.position(w, h);
-}
+// starting page
+let state = "start";
 
 function setup() {
   cnv = createCanvas(600, windowHeight);
@@ -47,66 +38,87 @@ function setup() {
   createEnemies();
 }
 
+function preload() {
+  alienImage = loadImage("ufo.png");
+  playerImage = loadImage("player.png");
+  laserImage = loadImage("laser.png");
+  explosionImage = loadImage("explosion.png");
+  startImage = loadImage("start.png");
+}
+
+function centerCanvas() {
+  let w = (windowWidth - width) / 2;
+  let h = windowHeight/100 - 10;
+  cnv.position(w, h);
+}
+
 function windowResized() {
   centerCanvas();
   resizeCanvas(600, windowHeight);
 }
 
 function draw() {
-  background(10, 10, 50);
-  rectMode(CENTER);
-  
-  // draws player
-  image(playerImage, x, height - playerSize, playerSize, 100);
-
-  // controls player movement
-  handleKeys();
-  
-  // draws bullet
-  for (let bullet of bullets) {
-    bullet.y -= 5;
-    image(laserImage, bullet.x, bullet.y, 10, 20);
+  if (state === "start") {
+    startScreen();
   }
 
-  // draw enemies
-  for (let enemy of enemies) {
+  if (state === "game") {
+    background(10, 10, 50);
+    rectMode(CENTER);
+    
+    // draws player
+    image(playerImage, x, height - playerSize, playerSize, 100);
+
+    // controls player movement
+    handleKeys();
+    
+    // draws bullet
+    for (let bullet of bullets) {
+      bullet.y -= 5;
+      image(laserImage, bullet.x, bullet.y, 10, 20);
+    }
+
+    // draw enemies
+    for (let enemy of enemies) {
       enemy.y += 3;
       image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
-    
-    // if 3 enemies pass player; player loses
-    if (enemy.y > height) {
-      enemies.splice(enemies.indexOf(enemy), 1);
-      lives -= 1;
-      if (lives === 0) {
-        textSize(30);
-        text("Oh No! The aliens invaded!", width/5, height/2);
-        noLoop();
-      }
-    }
-  }
-
-  // makes enemies and bullet disappear after they've collided 
-  for (let enemy of enemies) {
-    for(let bullet of bullets) {
-      if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+      
+      // if 3 enemies pass player; player loses
+      if (enemy.y > height) {
         enemies.splice(enemies.indexOf(enemy), 1);
-        bullets.splice(bullets.indexOf(bullet), 1);
-        image(explosionImage, enemy.x,enemy.y, 110,90);
-
-        spawnEnemies();
-        // adds to score
-        score += 10;    
+        lives -= 1;
+        if (lives === 0) {
+          textSize(30);
+          text("Oh No! The aliens invaded!", width/5, height/2);
+          noLoop();
+        }
       }
+
+      // makes enemies and bullet disappear after they've collided 
+      for (let enemy of enemies) {
+        for(let bullet of bullets) {
+          if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+            enemies.splice(enemies.indexOf(enemy), 1);
+            bullets.splice(bullets.indexOf(bullet), 1);
+            image(explosionImage, enemy.x,enemy.y, 110,90);
+
+            spawnEnemies();
+            // adds to score
+            score += 10;    
+          }
+        }
+      }
+      
+
+      // score and number of lives on screen
+      textSize(20);
+      fill(255);
+      text("Score:", 15, 35);
+      text(score, 80, 35);
+      text("Lives:", width - 85, 35);
+      text(lives, width-20, 35);
     }
   }
-
-  // score and number of lives on screen
-  textSize(20);
-  fill(255);
-  text("Score:", 15, 35);
-  text(score, 80, 35);
-  text("Lives:", width - 85, 35);
-  text(lives, width-20, 35);
 }
 
 function createEnemies() {
@@ -136,13 +148,22 @@ function handleKeys() {
   }
 }
 
-function keyTyped() {
-  // lets player shoot
-  if (key === " ") { 
-    let bullet = {
-      x : x+1,
-      y : height - 1.5*playerSize
-    };
-    bullets.push(bullet);
+function startScreen() {
+  if (mouseInsideRect) {
+    image(startImage, width/3, height/3, 700, 300);
+  }
+  else {
+    image(startImage, width/3, height/3, 500,100);
+  }
+  rect(width/3, height/3, 500, 100);
+}
+
+function mouseInsideRect(left, right, top, bottom) {
+  return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
+}
+
+function mousePressed() {
+  if (state && mouseInsideRect(400, 700, 400, 550)) {
+    state = "game";
   }
 }

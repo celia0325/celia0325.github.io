@@ -22,7 +22,7 @@ function draw() {
     startScreen();
   }
   if (state === "main") {
-    image(flower, 0, 0, 600, height-5);
+    "p5js_game";
   }
 }
 
