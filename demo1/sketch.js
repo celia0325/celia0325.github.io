@@ -6,10 +6,10 @@
 // - describe what you did to take this project "above and beyond"
 
 let state = "start";
-let flower;
+let treesImg;
 
 function preload() {
-  flower = loadImage("flowers.jpg");
+  treesImg = loadImage("flowers.jpg");
 }
 
 function setup() {
@@ -17,31 +17,35 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background("black");
   if (state === "start") {
     startScreen();
   }
   if (state === "main") {
-    "p5js_game";
+    image(treesImg, 0, 0, width, height);
   }
 }
 
 function mousePressed() {
   if (state === "start" && mouseInsideRect(400, 700, 400, 550)) {
     state = "main";
-  }
+  } 
 }
 
 function startScreen() {
-  if (mouseInsideRect) {
-    fill("gray");
+  if (mouseInsideRect(400, 700, 400, 550)) {
+    fill("pink");
   }
   else {
-    fill("black");
+    fill("red");
   }
-  rect(400,400, 300,150);
+  rect(400, 400, 300, 150);
+  fill("white");
+  textSize(50);
+  text("Begin!", 480, 490);
 }
 
 function mouseInsideRect(left, right, top, bottom) {
-  return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
+  return mouseX >= left && mouseX <= right &&
+         mouseY >= top && mouseY <= bottom;
 }

@@ -15,7 +15,7 @@ let playerImage;
 let alienImage;
 let laserImage;
 let explosionImage;
-let startImage;
+let strtImage;
 
 let cnv;
 
@@ -30,6 +30,10 @@ let y = height - playerSize;
 
 // starting page
 let state = "start";
+let startX = 300;
+let startY = 400;
+let startW = 300;
+let startH = 150;
 
 function setup() {
   cnv = createCanvas(600, windowHeight);
@@ -43,7 +47,7 @@ function preload() {
   playerImage = loadImage("player.png");
   laserImage = loadImage("laser.png");
   explosionImage = loadImage("explosion.png");
-  startImage = loadImage("start.png");
+  strtImage = loadImage("start.png");
 }
 
 function centerCanvas() {
@@ -61,8 +65,9 @@ function draw() {
   if (state === "start") {
     startScreen();
   }
-
   if (state === "game") {
+    image(playerImage);
+  }
     background(10, 10, 50);
     rectMode(CENTER);
     
@@ -109,7 +114,6 @@ function draw() {
         }
       }
       
-
       // score and number of lives on screen
       textSize(20);
       fill(255);
@@ -121,22 +125,11 @@ function draw() {
   }
 }
 
-function createEnemies() {
-  for(let spawns = 0; spawns < 5; spawns += 1) {
-    spawnEnemies();
+function mousePressed() {
+  if (state === "start" && mouseInsideRect(startX, startY*2, 400, 550)) {
+    state = "game";
   }
 }
-
-
-function spawnEnemies() {
-  // creates and places enemies
-  let enemy = {
-    x: random(enemySize, width - enemySize),
-    y: random(-1.1*height, 0),
-  };
-  enemies.push(enemy);
-}
-
 function handleKeys() {
   // player moves to the right when right arrow is down
   if (keyIsDown(39)&& x < width - playerSize/2) { 
@@ -149,21 +142,33 @@ function handleKeys() {
 }
 
 function startScreen() {
-  if (mouseInsideRect) {
-    image(startImage, width/3, height/3, 700, 300);
+  if (mouseInsideRect(startX, startY*2, 400, 550)) {
+    startW = 400;
+    startH = 200;
   }
   else {
-    image(startImage, width/3, height/3, 500,100);
+    startW = 300;
+    startH = 150;
   }
-  rect(width/3, height/3, 500, 100);
+  image(strtImage, startX, startY, startW, startH);
 }
+
 
 function mouseInsideRect(left, right, top, bottom) {
   return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
 }
 
-function mousePressed() {
-  if (state && mouseInsideRect(400, 700, 400, 550)) {
-    state = "game";
+function createEnemies() {
+  for(let spawns = 0; spawns < 5; spawns += 1) {
+    spawnEnemies();
   }
+}
+
+function spawnEnemies() {
+  // creates and places enemies
+  let enemy = {
+    x: random(enemySize, width - enemySize),
+    y: random(-1.1*height, 0),
+  };
+  enemies.push(enemy);
 }
