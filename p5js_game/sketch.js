@@ -21,7 +21,6 @@ let bullets = [];
 let enemies = [];
 
 let enemySize = 20;
-let enemySpeed;
 
 let playerImage;
 let alienImage;
@@ -66,7 +65,7 @@ function windowResized() {
 }
 
 function draw() {
-  background("black");
+  background(10, 10, 50);
   if (state === "start") {
     startScreen();
   }
@@ -110,7 +109,6 @@ function mouseInButton(left, right, top, bottom) {
 }
 
 function gamePlay() {
-  background(10, 10, 50);
   rectMode(CENTER);
     
   // draws player
