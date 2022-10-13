@@ -1,21 +1,32 @@
-// Shooter Game
+// Alien Invasion
 // Celia Newell
 // September 19
 //
 // Extra for Experts:
-// created arrays, used array functions and array for loops
+// created arrays, used array functions and arrays in for loops
 
+// starting page
+let state = "start";
+let strtBlueImg;
+let strtImg;
+let img;
 
+let l = 300;
+let r = 300;
+let t = 200;
+let b = 100;
+
+// game play
 let bullets = [];
 let enemies = [];
 
 let enemySize = 20;
+let enemySpeed;
 
 let playerImage;
 let alienImage;
 let laserImage;
 let explosionImage;
-let strtImage;
 
 let cnv;
 
@@ -25,28 +36,22 @@ let lives = 3;
 let playerSize = 50;
 let playerSpeed = 7;
 let x = playerSize;
-let y = height - playerSize;
 
-// starting page
-let state = "start";
-let startX = 300;
-let startY = 400;
-let startW = 300;
-let startH = 150;
+function preload() {
+  strtBlueImg = loadImage("startblue.png");
+  strtImg = loadImage("start.png");
+
+  alienImage = loadImage("ufo.png");
+  playerImage = loadImage("player.png");
+  laserImage = loadImage("laser.png");
+  explosionImage = loadImage("explosion.png");
+}
 
 function setup() {
   cnv = createCanvas(600, windowHeight);
   centerCanvas();
   imageMode(CENTER);
   createEnemies();
-}
-
-function preload() {
-  alienImage = loadImage("ufo.png");
-  playerImage = loadImage("player.png");
-  laserImage = loadImage("laser.png");
-  explosionImage = loadImage("explosion.png");
-  strtImage = loadImage("start.png");
 }
 
 function centerCanvas() {
@@ -61,6 +66,50 @@ function windowResized() {
 }
 
 function draw() {
+  background("black");
+  if (state === "start") {
+    startScreen();
+  }
+  if (state === "game") {
+    gamePlay();
+    
+  }
+}
+
+
+function startScreen() {
+  // instructions & title page
+  textFont("monospace");
+  fill(color(0,255,100));
+  textSize(40);
+  text("Alien Invasion", width/4, height/5)
+  fill("white");
+  textSize(20);
+  text("Use the arrow keys to move from left to right!", width/10.5, height/1.3);
+  text("Use space keys to shoot the aliens!", width/5.5, height/1.4);
+  
+  if (mouseInButton(l, l+r, t, b+r)) {
+    // start button becomes blue when hovered over
+    img = strtBlueImg;
+  }
+  else {
+    img = strtImg;
+  }
+  image(img, l, r, t, b);
+}
+
+function mousePressed() {
+  if (state === "start" && mouseInButton(l, l+r, t, b+r)) {
+    state = "game";
+  } 
+}
+
+// says if inside start button
+function mouseInButton(left, right, top, bottom) {
+  return mouseX >= left - l/3 && mouseX <= right - r/1.5 && mouseY >= top + t/6 && mouseY <= bottom - b/2;
+}
+
+function gamePlay() {
   background(10, 10, 50);
   rectMode(CENTER);
     
@@ -69,56 +118,58 @@ function draw() {
 
   // controls player movement
   handleKeys();
-    
+  
   // draws bullet
   for (let bullet of bullets) {
     bullet.y -= 5;
     image(laserImage, bullet.x, bullet.y, 10, 20);
   }
+    
+  // doesn't spawn enemies until player is moved
+  if(x !== playerSize ){
+    // draw enemies
+    for (let enemy of enemies) {
+      // enemy speed depends on height (slower when shorter screen and faster when taller)
+      enemy.y += height/225;
+      image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
+        
+      // if 3 enemies pass player; player loses
+      if (enemy.y > height) {
+        enemies.splice(enemies.indexOf(enemy), 1);
+        lives -= 1;
+        if (lives === 0) {
+          textSize(30);
+          text("Oh No! The aliens invaded!", width/5, height/2);
+          noLoop();
+        }
+      }
+    }
 
-  // draw enemies
-  for (let enemy of enemies) {
-    enemy.y += 3;
-    image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
-      
-    // if 3 enemies pass player; player loses
-    if (enemy.y > height) {
-      enemies.splice(enemies.indexOf(enemy), 1);
-      lives -= 1;
-      if (lives === 0) {
-        textSize(30);
-        text("Oh No! The aliens invaded!", width/5, height/2);
-        noLoop();
+      // makes enemies and bullets disappear after they've collided 
+    for (let enemy of enemies) {
+      for(let bullet of bullets) {
+          if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+            enemies.splice(enemies.indexOf(enemy), 1);
+            bullets.splice(bullets.indexOf(bullet), 1);
+            
+            // creates an explosion in place of enemy
+            image(explosionImage, enemy.x,enemy.y, 110,90);
+            spawnEnemies();
+            
+            // adds 10 to score
+            score += 10;    
+        }
       }
     }
   }
-
-    // makes enemies and bullet disappear after they've collided 
-  for (let enemy of enemies) {
-    for(let bullet of bullets) {
-        if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
-          enemies.splice(enemies.indexOf(enemy), 1);
-          bullets.splice(bullets.indexOf(bullet), 1);
-          image(explosionImage, enemy.x,enemy.y, 110,90);
-          spawnEnemies();
-          
-          // adds to score
-          score += 10;    
-      }
-    }
-  }
       
-  // score and number of lives on screen
+  // shows score and number of lives on screen
   textSize(20);
   fill(255);
   text("Score:", 15, 35);
   text(score, 80, 35);
   text("Lives:", width - 85, 35);
   text(lives, width-20, 35);
-}
-
-function gamePlay() {
-  
 }
 
 function handleKeys() {
@@ -133,7 +184,7 @@ function handleKeys() {
 }
 
 function keyTyped() {
-  // lets player shoot
+  // lets player shoot when space is pressed
   if (key === " ") { 
     let bullet = {
       x : x+1,
@@ -143,12 +194,14 @@ function keyTyped() {
   }
 }
 
+// spawns enemies in groups of 3
 function createEnemies() {
-  for(let spawns = 0; spawns < 5; spawns += 1) {
+  for(let spawns = 0; spawns < 3; spawns += 1) {
     spawnEnemies();
   }
 }
 
+// places enemies above screen
 function spawnEnemies() {
   // creates and places enemies
   let enemy = {
