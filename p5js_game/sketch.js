@@ -21,7 +21,6 @@ let cnv;
 
 let score = 0;
 let lives = 3;
-let i = 500;
 
 let playerSize = 50;
 let playerSpeed = 7;
@@ -62,74 +61,66 @@ function windowResized() {
 }
 
 function draw() {
-  if (state === "start") {
-    startScreen();
-  }
-  if (state === "game") {
-    image(playerImage);
-  }
-    background(10, 10, 50);
-    rectMode(CENTER);
+  background(10, 10, 50);
+  rectMode(CENTER);
     
-    // draws player
-    image(playerImage, x, height - playerSize, playerSize, 100);
+  // draws player
+  image(playerImage, x, height - playerSize, playerSize, 100);
 
-    // controls player movement
-    handleKeys();
+  // controls player movement
+  handleKeys();
     
-    // draws bullet
-    for (let bullet of bullets) {
-      bullet.y -= 5;
-      image(laserImage, bullet.x, bullet.y, 10, 20);
-    }
+  // draws bullet
+  for (let bullet of bullets) {
+    bullet.y -= 5;
+    image(laserImage, bullet.x, bullet.y, 10, 20);
+  }
 
-    // draw enemies
-    for (let enemy of enemies) {
-      enemy.y += 3;
-      image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
+  // draw enemies
+  for (let enemy of enemies) {
+    enemy.y += 3;
+    image(alienImage, enemy.x, enemy.y, 110, 90, enemySize);
       
-      // if 3 enemies pass player; player loses
-      if (enemy.y > height) {
-        enemies.splice(enemies.indexOf(enemy), 1);
-        lives -= 1;
-        if (lives === 0) {
-          textSize(30);
-          text("Oh No! The aliens invaded!", width/5, height/2);
-          noLoop();
-        }
+    // if 3 enemies pass player; player loses
+    if (enemy.y > height) {
+      enemies.splice(enemies.indexOf(enemy), 1);
+      lives -= 1;
+      if (lives === 0) {
+        textSize(30);
+        text("Oh No! The aliens invaded!", width/5, height/2);
+        noLoop();
       }
-
-      // makes enemies and bullet disappear after they've collided 
-      for (let enemy of enemies) {
-        for(let bullet of bullets) {
-          if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
-            enemies.splice(enemies.indexOf(enemy), 1);
-            bullets.splice(bullets.indexOf(bullet), 1);
-            image(explosionImage, enemy.x,enemy.y, 110,90);
-
-            spawnEnemies();
-            // adds to score
-            score += 10;    
-          }
-        }
-      }
-      
-      // score and number of lives on screen
-      textSize(20);
-      fill(255);
-      text("Score:", 15, 35);
-      text(score, 80, 35);
-      text("Lives:", width - 85, 35);
-      text(lives, width-20, 35);
     }
   }
+
+    // makes enemies and bullet disappear after they've collided 
+  for (let enemy of enemies) {
+    for(let bullet of bullets) {
+        if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+          enemies.splice(enemies.indexOf(enemy), 1);
+          bullets.splice(bullets.indexOf(bullet), 1);
+          image(explosionImage, enemy.x,enemy.y, 110,90);
+          spawnEnemies();
+          
+          // adds to score
+          score += 10;    
+      }
+    }
+  }
+      
+  // score and number of lives on screen
+  textSize(20);
+  fill(255);
+  text("Score:", 15, 35);
+  text(score, 80, 35);
+  text("Lives:", width - 85, 35);
+  text(lives, width-20, 35);
 }
 
-function mousePressed() {
-  if (state === "start" && mouseInsideRect(startX, startY*2, 400, 550)) {
-    state = "game";
-  }
+function gamePlay() {
+  
 }
+
 function handleKeys() {
   // player moves to the right when right arrow is down
   if (keyIsDown(39)&& x < width - playerSize/2) { 
@@ -141,21 +132,15 @@ function handleKeys() {
   }
 }
 
-function startScreen() {
-  if (mouseInsideRect(startX, startY*2, 400, 550)) {
-    startW = 400;
-    startH = 200;
+function keyTyped() {
+  // lets player shoot
+  if (key === " ") { 
+    let bullet = {
+      x : x+1,
+      y : height - 1.5*playerSize
+    }
+    bullets.push(bullet);
   }
-  else {
-    startW = 300;
-    startH = 150;
-  }
-  image(strtImage, startX, startY, startW, startH);
-}
-
-
-function mouseInsideRect(left, right, top, bottom) {
-  return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
 }
 
 function createEnemies() {
