@@ -61,7 +61,7 @@ function centerCanvas() {
 
 function windowResized() {
   centerCanvas();
-  resizeCanvas(600, windowHeight);
+  resizeCanvas(700, windowHeight);
 }
 
 function draw() {
@@ -81,7 +81,7 @@ function startScreen() {
   textFont("monospace");
   fill(color(0,255,100));
   textSize(40);
-  text("Alien Invasion", width/4, height/5)
+  text("Alien Invasion", width/3.5, height/5)
   fill("white");
   textSize(20);
   text("Use the arrow keys to move from left to right!", width/10.5, height/1.3);
