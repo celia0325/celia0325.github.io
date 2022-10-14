@@ -11,8 +11,8 @@ let strtBlueImg;
 let strtImg;
 let img;
 
-let l = 300;
-let r = 350;
+let l = 350;
+let r = 400;
 let t = 200;
 let b = 100;
 
@@ -81,13 +81,13 @@ function startScreen() {
   textFont("monospace");
   fill(color(0,255,100));
   textSize(40);
-  text("Alien Invasion", width/3.5, height/5)
+  text("Alien Invasion", width/3.5, height/5);
   fill("white");
   textSize(20);
-  text("Use the arrow keys to move from left to right!", width/10.5, height/1.3);
-  text("Use space keys to shoot the aliens!", width/5.5, height/1.4);
+  text("Use the arrow keys to move from left to right!", width/8, height/1.3);
+  text("Use space keys to shoot the aliens!", width/5, height/1.4);
   
-  if (mouseInButton(l, l+r, t, b+r)) {
+  if (mouseInButton(l, l+r, t, b+l)) {
     // start button becomes blue when hovered over
     img = strtBlueImg;
   }
@@ -98,7 +98,7 @@ function startScreen() {
 }
 
 function mousePressed() {
-  if (state === "start" && mouseInButton(l, l+r, t, b+r)) {
+  if (state === "start" && mouseInButton(l, l+r, t, b+l)) {
     state = "game";
   } 
 }
@@ -143,19 +143,19 @@ function gamePlay() {
       }
     }
 
-      // makes enemies and bullets disappear after they've collided 
+    // makes enemies and bullets disappear after they've collided 
     for (let enemy of enemies) {
       for(let bullet of bullets) {
-          if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
-            enemies.splice(enemies.indexOf(enemy), 1);
-            bullets.splice(bullets.indexOf(bullet), 1);
+        if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+          enemies.splice(enemies.indexOf(enemy), 1);
+          bullets.splice(bullets.indexOf(bullet), 1);
             
-            // creates an explosion in place of enemy
-            image(explosionImage, enemy.x,enemy.y, 110,90);
-            spawnEnemies();
+          // creates an explosion in place of enemy
+          image(explosionImage, enemy.x,enemy.y, 110,90);
+          spawnEnemies();
             
-            // adds 10 to score
-            score += 10;    
+          // adds 10 to score
+          score += 10;    
         }
       }
     }
@@ -187,7 +187,7 @@ function keyTyped() {
     let bullet = {
       x : x+1,
       y : height - 1.5*playerSize
-    }
+    };
     bullets.push(bullet);
   }
 }
