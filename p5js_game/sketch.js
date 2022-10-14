@@ -12,7 +12,7 @@ let strtImg;
 let img;
 
 let l = 300;
-let r = 300;
+let r = 350;
 let t = 200;
 let b = 100;
 
