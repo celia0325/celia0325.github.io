@@ -47,7 +47,7 @@ function preload() {
 }
 
 function setup() {
-  cnv = createCanvas(600, windowHeight);
+  cnv = createCanvas(700, windowHeight);
   centerCanvas();
   imageMode(CENTER);
   createEnemies();
