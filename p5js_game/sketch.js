@@ -10,15 +10,9 @@ let state = "start";
 let strtBlueImg;
 let strtImg;
 let img;
-<<<<<<< HEAD
 
 let l = 350;
 let r = 400;
-=======
-// start button placement
-let l = 350;
-let r = 350;
->>>>>>> 8b1828d5d1a1a056b535bd69944cb22ffb5fe655
 let t = 200;
 let b = 100;
 
@@ -96,24 +90,16 @@ function startScreen() {
   text("Alien Invasion", width/3.5, height/5);
   fill("white");
   textSize(20);
-<<<<<<< HEAD
-  text("Use the arrow keys to move from left to right!", width/8, height/1.3);
-  text("Use space keys to shoot the aliens!", width/5, height/1.4);
-  
-  if (mouseInButton(l, l+r, t, b+l)) {
-    // start button becomes blue when hovered over
-=======
   text("Use the arrow keys to move from left to right!", width/7, height/1.3);
   text("Use space key to shoot the aliens!", width/4, height/1.2);
   
-  // start button changes from green to blue when hovered over
-  if (mouseInButton(l, l+r, t, b+r)) {
->>>>>>> 8b1828d5d1a1a056b535bd69944cb22ffb5fe655
-    img = strtBlueImg;
-  }
-  else {
+    // start button changes from green to blue when hovered over
+    if (mouseInButton(l, l+r, t, b+r)) {
+      img = strtBlueImg;
+    }
+    else {
     img = strtImg;
-  }
+    }
   image(img, l, r, t, b);
 }
 
@@ -175,7 +161,6 @@ function gamePlay() {
         }
       }
 
-<<<<<<< HEAD
     // makes enemies and bullets disappear after they've collided 
     for (let enemy of enemies) {
       for(let bullet of bullets) {
@@ -189,7 +174,7 @@ function gamePlay() {
             
           // adds 10 to score
           score += 10;    
-=======
+
       // makes enemies and bullets disappear after they've collided 
       for (let enemy of enemies) {
         for(let bullet of bullets) {
@@ -204,7 +189,6 @@ function gamePlay() {
               // adds 10 to score
               score += 10;    
           }
->>>>>>> 8b1828d5d1a1a056b535bd69944cb22ffb5fe655
         }
       }
     }
@@ -243,7 +227,7 @@ function keyTyped() {
 
 // spawns enemies in groups of 3
 function createEnemies() {
-  for(let spawns = 0; spawns < 3; spawns += 1) {
+  for (let spawns = 0; spawns < 3; spawns += 1) {
     spawnEnemies();
   }
 }
