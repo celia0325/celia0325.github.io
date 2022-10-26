@@ -10,9 +10,9 @@ let state = "start";
 let strtBlueImg;
 let strtImg;
 let img;
-
+// start button placement
 let l = 350;
-let r = 400;
+let r = 350;
 let t = 200;
 let b = 100;
 
@@ -93,19 +93,19 @@ function startScreen() {
   text("Use the arrow keys to move from left to right!", width/7, height/1.3);
   text("Use space key to shoot the aliens!", width/4, height/1.2);
   
-    // start button changes from green to blue when hovered over
-    if (mouseInButton(l, l+r, t, b+r)) {
-      img = strtBlueImg;
-    }
-    else {
+  // start button changes from green to blue when hovered over
+  if (mouseInButton(l, l+r, t, b+r)) {
+    img = strtBlueImg;
+  }
+  else {
     img = strtImg;
-    }
+  }
   image(img, l, r, t, b);
 }
 
 // changes state to begin gamePlay()
 function mousePressed() {
-  if (state === "start" && mouseInButton(l, l+r, t, b+l)) {
+  if (state === "start" && mouseInButton(l, l+r, t, b+r)) {
     state = "game";
   } 
 }
@@ -161,33 +161,19 @@ function gamePlay() {
         }
       }
 
-    // makes enemies and bullets disappear after they've collided 
-    for (let enemy of enemies) {
-      for(let bullet of bullets) {
-        if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
-          enemies.splice(enemies.indexOf(enemy), 1);
-          bullets.splice(bullets.indexOf(bullet), 1);
-            
-          // creates an explosion in place of enemy
-          image(explosionImage, enemy.x,enemy.y, 110,90);
-          spawnEnemies();
-            
-          // adds 10 to score
-          score += 10;    
-
       // makes enemies and bullets disappear after they've collided 
       for (let enemy of enemies) {
         for(let bullet of bullets) {
-            if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
-              enemies.splice(enemies.indexOf(enemy), 1);
-              bullets.splice(bullets.indexOf(bullet), 1);
+          if (dist(enemy.x, enemy.y, bullet.x, bullet.y) < 30) {
+            enemies.splice(enemies.indexOf(enemy), 1);
+            bullets.splice(bullets.indexOf(bullet), 1);
               
-              // creates an explosion in place of enemy
-              image(explosionImage, enemy.x,enemy.y, 110, 90);
-              spawnEnemies();
+            // creates an explosion in place of enemy
+            image(explosionImage, enemy.x,enemy.y, 110, 90);
+            spawnEnemies();
               
-              // adds 10 to score
-              score += 10;    
+            // adds 10 to score
+            score += 10;    
           }
         }
       }
@@ -227,7 +213,7 @@ function keyTyped() {
 
 // spawns enemies in groups of 3
 function createEnemies() {
-  for (let spawns = 0; spawns < 3; spawns += 1) {
+  for(let spawns = 0; spawns < 3; spawns += 1) {
     spawnEnemies();
   }
 }
