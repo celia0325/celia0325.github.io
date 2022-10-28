@@ -1,13 +1,16 @@
-// grid demo
+// randomized grid demo
 
-let grid = 
-[[1,0,1,1,1,0,1,1], [1,0,1,0,1,0,1,1], [0,1,0,0,1,0,1,1], [0,1,0,0,1,0,1,1], 
-];
-
-let state = "start";
+let rows = 15;
+let cols = 30;
+let grid;
+let cellWidth;
+let cellHeight;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  cellWidth = width/cols;
+  cellHeight = height/rows;
+  grid = createRandom2dArray(cols, rows);
 }
 
 function draw() {
@@ -16,34 +19,49 @@ function draw() {
 }
 
 function displayGrid(grid) {
-  let cellW = width / grid[0].length;
-  let cellH = height / grid.length;
-
-  for (let y = 0; y < grid.length; y++) {
-    for (let x = 0; x < grid[y].length; x++) {
-      if (state === "start") {
-        fill("black");
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (grid[y][x] === 0) {
+        fill("magenta");
       }
-      if (state === "game") {
-        if (grid[y][x] === 0) {
-          fill("violet");
-        }
-        else if (grid[y][x] === 1) {
-          fill("magenta");
-        }
+      else if (grid[y][x] === 1) {
+        fill("violet");
       }
-      rect(x*cellW, y*cellH, cellW, cellH);
+      rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
   }
 }
 
-function mousePressed() {
-  state = "game";
-  let cellW = width / grid[0].length;
-  let cellH = height / grid.length;
+function create2dArray(cols, rows) {
+  let emptyArray = [];
+  for (let y = 0; y < rows; y ++) {
+    emptyArray.push([]);
+    for (let x=0; x<cols; x++) {
+      emptyArray[y].push(0);
+    }
+  }
+  return emptyArray;
+}
 
-  let x = Math.floor(mouseX/cellW);
-  let y = Math.floor(mouseY/cellH);
+function createRandom2dArray(cols, rows) {
+  let emptyArray = [];
+  for (let y = 0; y < rows; y++) {
+    emptyArray.push([]);
+    for (let x = 0; x < cols; x++) {
+      if (random(100) < 50) {
+        emptyArray[y].push(0);
+      }
+      else {
+        emptyArray[y].push(1);
+      }
+    }
+  }
+  return emptyArray;
+}
+
+function mousePressed() {
+  let x = Math.floor(mouseX / cellWidth);
+  let y = Math.floor(mouseY / cellHeight);
 
   if (grid[y][x] === 1) {
     grid[y][x] = 0;
