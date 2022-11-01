@@ -100,7 +100,5 @@ function mousePressed() {
     grid[y][x] = 2;
     turn = "x";
   }
-  else if (grid[y][x] === 1 || grid[y][x] === 2){
-    grid[y][x] = 0;
-  }
+ 
 }
