@@ -19,7 +19,7 @@ let newWidth;
 let colorIn = ["black", "green", "blue", "red", "orange", "pink"]; 
 let sequence = [];
 let num;
-let finds;
+let finds = [];
 
 function setup() {
   newWidth = windowHeight*0.85;
@@ -28,7 +28,7 @@ function setup() {
   cellWidth = width/COLS;
   cellHeight = height/ROWS;
   grid = create2dArray(COLS, ROWS);
-  
+  createSequence();
 }
 
 function centerCanvas() {
@@ -40,6 +40,7 @@ function centerCanvas() {
 function draw() {
   background("grey");
   displayGrid(grid);
+  displaySequence();
 }
 
 function createSequence() {
@@ -47,38 +48,35 @@ function createSequence() {
     sequence.push(n);
   }
   for (let i = colorIn.length - 1; i > 0; i--) {
-      // Generate random number
-      let j = Math.floor(Math.random() * (colorIn.length));
+    // Generate random number
+    let j = Math.floor(Math.random() * colorIn.length);
                          
-      let temp = sequence[i];
-      sequence[i] = sequence[j];
-      sequence[j] = temp;
+    let temp = sequence[i];
+    sequence[i] = sequence[j];
+    sequence[j] = temp;
     
-      //makes sure no circles are left black
-      if (sequence.includes(0)) {
-        num = sequence.lastIndexOf(0);
-        sequence[num] = sequence[i]
-      }
+    //makes sure no circles are left black
+    if (sequence.includes(0)) {
+      num = sequence.lastIndexOf(0);
+      sequence[num] = sequence[i];
+    }
   }
-  noLoop();
 }
 
 function displaySequence() {
-  createSequence();
-
   let centreW = cellWidth/4;
   let centreH = cellHeight/4;
   
-    for (let x = 0; x < COLS; x++) {
-      fill("grey");
-      strokeWeight(4);
-      rect(x*cellWidth, 0, cellWidth, cellHeight);
+  for (let x = 0; x < COLS; x++) {
+    fill("grey");
+    strokeWeight(4);
+    rect(x*cellWidth, 0, cellWidth, cellHeight);
 
-      for (let filled = 0; filled < colorIn.length; filled++) {
-        if (sequence[x] === filled) {
-          fill(colorIn[filled]);
-        }
-    circle(x*cellWidth + centreW*2, centreH*2, centreW);  
+    for (let filled = 0; filled < colorIn.length; filled++) {
+      if (sequence[x] === filled) {
+        fill(colorIn[filled]);
+      }
+      circle(x*cellWidth + centreW*2, centreH*2, centreW);  
     }
   }
 }
@@ -118,6 +116,18 @@ function create2dArray(COLS, ROWS) {
   return emptyArray;
 }
 
+function displayGuess() {
+  for (let x = 0; x < COLS; x++) {
+    strokeWeight(4);
+    if (finds[x] > 0) {
+      fill(colorIn[finds[x]]);
+    }
+  }
+  circle(100, 100, cellHeight);
+}
+
+
+
 function mousePressed() {
   let x = Math.floor(mouseX / cellWidth);
   let y = Math.floor(mouseY / cellHeight);
@@ -134,5 +144,14 @@ function mousePressed() {
 function keyTyped() {
   if (key === " ") {
     submit --;
+    for (let u = 0; u < colorIn.length; u++) {
+      if (grid[submit+1][u] === sequence[u]){
+        finds.push(sequence[u]);
+      }
+      else {
+        finds.push(0);
+      }
+      displayGuess();
+    }
   }
 }
