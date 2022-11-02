@@ -9,11 +9,17 @@ let ROWS = 8;
 let COLS = 6;
 let grid;
 
+let submit = ROWS-1;
+
 let cellWidth;
 let cellHeight;
 let cnv;
 let newWidth;
+
 let colorIn = ["black", "green", "blue", "red", "orange", "pink"]; 
+let sequence = [];
+let num;
+let finds;
 
 function setup() {
   newWidth = windowHeight*0.85;
@@ -22,6 +28,7 @@ function setup() {
   cellWidth = width/COLS;
   cellHeight = height/ROWS;
   grid = create2dArray(COLS, ROWS);
+  
 }
 
 function centerCanvas() {
@@ -35,6 +42,48 @@ function draw() {
   displayGrid(grid);
 }
 
+function createSequence() {
+  for (let n = 0; n < colorIn.length; n++) {
+    sequence.push(n);
+  }
+  for (let i = colorIn.length - 1; i > 0; i--) {
+      // Generate random number
+      let j = Math.floor(Math.random() * (colorIn.length));
+                         
+      let temp = sequence[i];
+      sequence[i] = sequence[j];
+      sequence[j] = temp;
+    
+      //makes sure no circles are left black
+      if (sequence.includes(0)) {
+        num = sequence.lastIndexOf(0);
+        sequence[num] = sequence[i]
+      }
+  }
+  noLoop();
+}
+
+function displaySequence() {
+  createSequence();
+
+  let centreW = cellWidth/4;
+  let centreH = cellHeight/4;
+  
+    for (let x = 0; x < COLS; x++) {
+      fill("grey");
+      strokeWeight(4);
+      rect(x*cellWidth, 0, cellWidth, cellHeight);
+
+      for (let filled = 0; filled < colorIn.length; filled++) {
+        if (sequence[x] === filled) {
+          fill(colorIn[filled]);
+        }
+    circle(x*cellWidth + centreW*2, centreH*2, centreW);  
+    }
+  }
+}
+
+
 function displayGrid(grid) {
   let centreW = cellWidth/4;
   let centreH = cellHeight/4;
@@ -45,9 +94,12 @@ function displayGrid(grid) {
       strokeWeight(4);
       rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
 
-      for (let f = 0; f < colorIn.length; f++) {
-        if (grid[y][x] === f) {
-          fill(colorIn[f]);
+      for (let filled = 0; filled < colorIn.length; filled++) {
+        if (grid[y][x] === filled) {
+          fill(colorIn[filled]);
+        }
+        if (grid[y][x] === 6) {
+          grid[y][x] = 0;
         }
       }
       circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
@@ -72,13 +124,15 @@ function mousePressed() {
 
   // checks what number is at [x][y] and adds 1 so the colors shift
   for (let colorFind = 0; colorFind < colorIn.length; colorFind++) {
-    if (grid[y][x] === colorFind) {
-      grid[y][x] = colorFind+1;
+    if (grid[submit][x] === colorFind) {
+      grid[submit][x] = colorFind+1;
       colorFind++;
-      
-      if (colorFind > colorIn.length) {
-        colorFind = 0;
-      }
     }
+  }
+}
+
+function keyTyped() {
+  if (key === " ") {
+    submit --;
   }
 }
