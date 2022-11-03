@@ -19,7 +19,7 @@ let newWidth;
 let colorIn = ["black", "green", "blue", "red", "orange", "pink"]; 
 let sequence = [];
 let num;
-let finds = [];
+let finds;
 
 function setup() {
   newWidth = windowHeight*0.85;
@@ -28,6 +28,7 @@ function setup() {
   cellWidth = width/COLS;
   cellHeight = height/ROWS;
   grid = create2dArray(COLS, ROWS);
+  finds = create2dArray(COLS, ROWS)
   createSequence();
 }
 
@@ -101,7 +102,11 @@ function displayGrid(grid) {
         }
       }
       circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
+     
     }
+  }
+  if (submit < 7) {
+    displayGuess();
   }
 }
 
@@ -119,12 +124,11 @@ function create2dArray(COLS, ROWS) {
 function displayGuess() {
   for (let x = 0; x < COLS; x++) {
     strokeWeight(4);
-    if (finds[x] > 0) {
-      fill(colorIn[finds[x]]);
-    }
+    fill(colorIn[finds[submit+1][x]]);
+    rect(x*cellWidth, (submit+1)*cellHeight, cellWidth, cellHeight);
   }
-  circle(100, 100, cellHeight);
 }
+
 
 
 
@@ -146,12 +150,11 @@ function keyTyped() {
     submit --;
     for (let u = 0; u < colorIn.length; u++) {
       if (grid[submit+1][u] === sequence[u]){
-        finds.push(sequence[u]);
+        finds[submit+1][u] = (sequence[u]);
       }
       else {
-        finds.push(0);
+        finds[submit+1][u] = 0;
       }
-      displayGuess();
     }
   }
 }
