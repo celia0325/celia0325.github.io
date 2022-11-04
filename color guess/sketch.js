@@ -5,7 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let ROWS = 8;
+let ROWS = 6;
 let COLS = 6;
 let grid;
 
@@ -41,7 +41,6 @@ function centerCanvas() {
 function draw() {
   background("grey");
   displayGrid(grid);
-  displaySequence();
 }
 
 function createSequence() {
@@ -105,7 +104,7 @@ function displayGrid(grid) {
      
     }
   }
-  if (submit < 7) {
+  if (submit < ROWS-1) {
     displayGuess();
   }
 }
@@ -123,14 +122,13 @@ function create2dArray(COLS, ROWS) {
 
 function displayGuess() {
   for (let x = 0; x < COLS; x++) {
-    strokeWeight(4);
-    fill(colorIn[finds[submit+1][x]]);
-    rect(x*cellWidth, (submit+1)*cellHeight, cellWidth, cellHeight);
+    for (let y = 1; y < ROWS; y++) {
+      strokeWeight(4);
+      fill(colorIn[finds[(ROWS-1)+y][x]]);
+      rect(x*cellWidth, (submit+y)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
+    }
   }
 }
-
-
-
 
 function mousePressed() {
   let x = Math.floor(mouseX / cellWidth);
