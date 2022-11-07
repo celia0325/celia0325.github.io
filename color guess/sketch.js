@@ -13,15 +13,22 @@ let cnv;
 let cellWidth;
 let cellHeight;
 
-let colorIn = ["black", "green", "blue", "purple", "violet", "white"]; 
+let colorIn = ["black", "blue", "purple", "violet", "yellow", "white", "red", "orange", "pink"]; 
 let sequence = [];
 let num;
 let finds;
 
-let backColr = "grey"
+let doDisplay = true;
+let notExactlyImg;
+
+let backColr = "grey";
+
+function preload() {
+  notExactlyImg = loadImage("notexactly.png");
+}
 
 function setup() {
-  width = windowHeight*0.85
+  width = windowHeight*0.85;
   cnv = createCanvas(width, windowHeight);
   centerCanvas();
   cellWidth = width/COLS;
@@ -43,26 +50,24 @@ function draw() {
 }
 
 function createSequence() {
-  for (let n = 0; n < colorIn.length; n++) {
+  for (let n = 0; n < colorIn.length-1; n++) {
     sequence.push(n);
+    console.log(sequence);
   }
   for (let i = colorIn.length - 1; i > 0; i--) {
-    // Generate random number
-    let j = Math.floor(Math.random() * colorIn.length);
+    // Generate random number between 0 and (6-1)
+    let j = Math.floor(Math.random() * colorIn.length-1);
                          
     let temp = sequence[i];
     sequence[i] = sequence[j];
-    sequence[j] = temp;
+    temp = sequence[j];
+    console.log(temp);
     
-    //makes sure no circles are left black
-    if (sequence.includes(0)) {
-      num = sequence.lastIndexOf(0);
-      sequence[num] = sequence[i];
-    }
+    console.log(temp);
   }
 }
 
-// ** used only in building process for checks
+// ** color version displays after final answer
 function displaySequence() {
   let centreW = cellWidth/4;
   let centreH = cellHeight/4;
@@ -72,11 +77,13 @@ function displaySequence() {
     strokeWeight(4);
     rect(x*cellWidth, 0, cellWidth, cellHeight);
 
-    for (let filled = 0; filled < colorIn.length; filled++) {
-      if (sequence[x] === filled) {
-        fill(colorIn[filled]);
+    if (doDisplay === true) {
+      for (let filled = 0; filled < colorIn.length; filled++) {
+        if (sequence[x] === filled) {
+          fill(colorIn[filled]);
+        }
+        circle(x*cellWidth + centreW*2, centreH*2, centreW);  
       }
-      circle(x*cellWidth + centreW*2, centreH*2, centreW);  
     }
   }
 }
@@ -91,29 +98,33 @@ function displayGrid(grid) {
 
       //makes sure every column has a colour match
       if (trueMatch === COLS) {
-        backColr = "red"
+        backColr = "green";
         console.log(true);
-        
       }
-  }
-  // sets up the grid
-  let centreW = cellWidth/4;
-  let centreH = cellHeight/4;
-  for (let y = 0; y < COLS; y++) {
-    for (let x = 0; x < COLS; x++) {
-      fill(backColr);
-      strokeWeight(4);
-      rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
 
-      for (let filled = 0; filled < colorIn.length; filled++) {
-        if (grid[y][x] === filled) {
-          fill(colorIn[filled]);
-        }
-        if (grid[y][x] === 6) {
-          grid[y][x] = 0;
-        }
+      if (trueMatch !== COLS && submit === 0) {
+        backColr = "red";
+        console.log(false);
       }
-      circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
+    }
+    // sets up the grid
+    let centreW = cellWidth/4;
+    let centreH = cellHeight/4;
+    for (let y = 0; y < COLS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        fill(backColr);
+        strokeWeight(4);
+        rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
+
+        for (let filled = 0; filled < colorIn.length; filled++) {
+          if (grid[y][x] === filled) {
+            fill(colorIn[filled]);
+          }
+          if (grid[y][x] === 6) {
+            grid[y][x] = 0;
+          }
+        }
+        circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
       }
     }
   }
@@ -138,9 +149,12 @@ function create2dArray(COLS, ROWS) {
 // shows which colours are in the right spots
 function displayGuess() {
   for (let y = 0; y < COLS; y++) {
-    for (let x = 1; x < ROWS; x++) {
+    for (let x = 1; x < ROWS+1; x++) {
       strokeWeight(4);
-      fill(colorIn[finds[(submit+1)][y]]);
+      fill(colorIn[finds[submit+1][y]]);
+      if (sequence.includes(finds[submit+1][y])) {
+        image(notExactlyImg, y*cellWidth ,(x+submit)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
+      }
       rect(y*cellWidth,(x+submit)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
     }
   }
@@ -168,7 +182,10 @@ function keyTyped() {
     for (let u = 0; u < colorIn.length; u++) {
 
       if (grid[submit+1][u] === sequence[u]){
-        finds[submit+1][u] = (sequence[u]);
+        finds[submit+1][u] = sequence[u];
+      }
+      else if (sequence.includes(grid[submit+1][u])){
+        finds[submit+1][u] = sequence[u];
       }
       else {
         finds[submit+1][u] = 0;
