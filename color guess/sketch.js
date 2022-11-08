@@ -13,7 +13,7 @@ let cnv;
 let cellWidth;
 let cellHeight;
 
-let colorIn = ["black", "blue", "purple", "violet", "yellow", "white", "red", "orange", "pink"]; 
+let colorIn = ["black", "blue", "purple", "violet", "yellow", "white", "red", "orange", "green","red"]; 
 let sequence = [];
 let num;
 let finds;
@@ -50,21 +50,19 @@ function draw() {
 }
 
 function createSequence() {
-  for (let n = 0; n < colorIn.length-1; n++) {
-    sequence.push(n);
-    console.log(sequence);
-  }
   for (let i = colorIn.length - 1; i > 0; i--) {
     // Generate random number between 0 and (6-1)
-    let j = Math.floor(Math.random() * colorIn.length-1);
+    let j = Math.floor(Math.random() * (colorIn.length-2)+1);
+    sequence.push(j);
                          
-    let temp = sequence[i];
-    sequence[i] = sequence[j];
-    temp = sequence[j];
-    console.log(temp);
-    
-    console.log(temp);
+    console.log(j);
+
+    if (sequence.includes(0)) {
+      num = sequence.lastIndexOf(0);
+      sequence[num] = sequence[i-j];
+    }
   }
+  console.log(sequence);
 }
 
 // ** color version displays after final answer
@@ -120,7 +118,7 @@ function displayGrid(grid) {
           if (grid[y][x] === filled) {
             fill(colorIn[filled]);
           }
-          if (grid[y][x] === 6) {
+          if (grid[y][x] === colorIn.length-1) {
             grid[y][x] = 0;
           }
         }
@@ -159,7 +157,6 @@ function displayGuess() {
     }
   }
 }
-
 
 function mousePressed() {
   let x = Math.floor(mouseX / cellWidth);
