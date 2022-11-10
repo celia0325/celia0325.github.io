@@ -5,7 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 let ROWS = 6;
-let COLS = 6;
+let COLS = 4;
 let grid;
 
 let submit = ROWS-1;
@@ -13,10 +13,13 @@ let cnv;
 let cellWidth;
 let cellHeight;
 
-let colorIn = ["black", "blue", "purple", "violet", "yellow", "white", "red", "orange", "pink"]; 
+let colorIn = ["black", "red", "orange", "yellow", "green", "blue", "purple", "pink", "white", "violet"]; 
 let sequence = [];
 let num;
 let finds;
+
+let guessHistory;
+let guessCount = 1;
 
 let doDisplay = true;
 let notExactlyImg;
@@ -28,13 +31,16 @@ function preload() {
 }
 
 function setup() {
-  width = windowHeight*0.85;
+  width = windowHeight*0.65;
   cnv = createCanvas(width, windowHeight);
   centerCanvas();
+
   cellWidth = width/COLS;
   cellHeight = height/ROWS;
+  
   grid = create2dArray(COLS, ROWS);
   finds = create2dArray(COLS, ROWS);
+  guessHistory = create2dArray(COLS, ROWS);
   createSequence();
 }
 
@@ -50,21 +56,23 @@ function draw() {
 }
 
 function createSequence() {
-  for (let n = 0; n < colorIn.length-1; n++) {
+  for (let n = 1; n < colorIn.length; n++) {
     sequence.push(n);
-    console.log(sequence);
   }
-  for (let i = colorIn.length - 1; i > 0; i--) {
-    // Generate random number between 0 and (6-1)
-    let j = Math.floor(Math.random() * colorIn.length-1);
+  for (let i = colorIn.length-2; i > 0; i--) {
+    // Generate random number between 0 and whatever the last index of colour
+    let j = Math.floor(Math.random() * (i+1));
+    
                          
     let temp = sequence[i];
     sequence[i] = sequence[j];
-    temp = sequence[j];
-    console.log(temp);
-    
-    console.log(temp);
+    sequence[j] = temp;
+  } 
+
+  for (let a = 1; a < colorIn.length-COLS; a++) {
+    sequence.pop();
   }
+
 }
 
 // ** color version displays after final answer
@@ -95,22 +103,23 @@ function displayGrid(grid) {
     // checks if all the grid dots are the same as the sequence
     if (submit < ROWS-1 && sequence[matches] === finds[submit+1][matches]) {
       trueMatch++;
+      
 
       //makes sure every column has a colour match
-      if (trueMatch === COLS) {
+      if (trueMatch === ROWS) {
         backColr = "green";
-        console.log(true);
+        displaySequence();
       }
 
       if (trueMatch !== COLS && submit === 0) {
         backColr = "red";
-        console.log(false);
+        displaySequence();
       }
     }
     // sets up the grid
     let centreW = cellWidth/4;
     let centreH = cellHeight/4;
-    for (let y = 0; y < COLS; y++) {
+    for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLS; x++) {
         fill(backColr);
         strokeWeight(4);
@@ -120,7 +129,7 @@ function displayGrid(grid) {
           if (grid[y][x] === filled) {
             fill(colorIn[filled]);
           }
-          if (grid[y][x] === 6) {
+          if (grid[y][x] >= colorIn.length) {
             grid[y][x] = 0;
           }
         }
@@ -148,18 +157,24 @@ function create2dArray(COLS, ROWS) {
 
 // shows which colours are in the right spots
 function displayGuess() {
-  for (let y = 0; y < COLS; y++) {
-    for (let x = 1; x < ROWS+1; x++) {
+  for (let y = 1; y < ROWS+1; y++) {
+    for (let x = 0; x < COLS; x++) {
       strokeWeight(4);
-      fill(colorIn[finds[submit+1][y]]);
-      if (sequence.includes(finds[submit+1][y])) {
-        image(notExactlyImg, y*cellWidth ,(x+submit)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
-      }
-      rect(y*cellWidth,(x+submit)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
-    }
-  }
-}
+      
+      fill(colorIn[finds[submit+1][x]]);
+       rect(x*cellWidth,(submit+1)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
 
+
+      if (sequence[x] === finds[submit+1][x]) {
+        x = x;
+      }
+
+      else if (sequence.includes(finds[submit+1][x])) {
+        image(notExactlyImg, x*cellWidth ,(1+submit)*cellHeight+cellHeight*0.66, cellWidth, cellHeight*0.33);
+      }
+    }
+  }  
+}
 
 function mousePressed() {
   let x = Math.floor(mouseX / cellWidth);
@@ -179,17 +194,19 @@ function keyTyped() {
     submit --;
 
     //shows what colors are correct after submission
-    for (let u = 0; u < colorIn.length; u++) {
+    for (let u = 0; u < COLS; u++) {
 
       if (grid[submit+1][u] === sequence[u]){
         finds[submit+1][u] = sequence[u];
       }
       else if (sequence.includes(grid[submit+1][u])){
-        finds[submit+1][u] = sequence[u];
+        finds[submit+1][u] = grid[submit+1][u];
+       
       }
       else {
         finds[submit+1][u] = 0;
       }
+      
     }
   }
 }
