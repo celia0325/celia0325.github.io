@@ -41,7 +41,7 @@ function preload() {
 
 function setup() {
   width = 400;
-  cnv = createCanvas(400, 600);
+  cnv = createCanvas(500, 700);
   centerCanvas();
 
   cellWidth = width/COLS;
@@ -54,7 +54,7 @@ function setup() {
 
 function centerCanvas() {
   let w = (windowWidth - width) / 2;
-  let h = windowHeight/100;
+  let h = (windowHeight - height) / 2;
   cnv.position(w, h);
 }
 
@@ -106,59 +106,59 @@ function displaySequence() {
 }
 
 function displayGrid() {
-    let trueMatch = 0;
-    for (let matches = 0; matches < COLS; matches++) {
+  let trueMatch = 0;
+  for (let matches = 0; matches < COLS; matches++) {
 
-      // checks if all the grid dots are the same as the sequence
+    // checks if all the grid dots are the same as the sequence
     if (submit < ROWS-1 && sequence[matches] === guessTracker[submit+1][matches]) {
       trueMatch++;
     } 
-        //makes sure every column has a colour match
-      if (trueMatch === COLS) {
-          backColor = "green";
-          displaySequence();
-        }
-        // turns red and displays sequence if player is out of guesses
-        if (trueMatch !== COLS && submit === 0) {
-          backColor = "red";
-          displaySequence();
-        }
-      }
-      // sets up the grid
-      let centreW = cellWidth/4;
-      let centreH = cellHeight/4;
-      for (let y = 1; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          
-          fill(backColor);
-          strokeWeight(4);
-          rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
-
-          // adds empty(black) guess boxes and the bottom of each larger box
-          if (ROWS-1 === submit){
-            fill(colorIn[0])
-            rect(x*cellWidth,(y)*cellHeight+cellHeight*0.77, cellWidth, cellHeight*0.33);
-          }
-
-          // goes through to fill each circle with the right colour
-          for (let filled = 0; filled < colorIn.length; filled++) {
-            if (grid[y][x] === filled) {
-              fill(colorIn[filled]);
-            }
-
-            // fills with black after displaying the last color
-            else if (grid[y][x] >= colorIn.length) {
-              grid[y][x] = 0;
-          }
-          circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
-        }
-      }
+    //makes sure every column has a colour match
+    if (trueMatch === COLS) {
+      backColor = "green";
+      displaySequence();
     }
-    // only happens if user has hit submit at least once
-    if (submit < ROWS-1) {
-      displayGuess();
+    // turns red and displays sequence if player is out of guesses
+    if (trueMatch !== COLS && submit === 0) {
+      backColor = "red";
+      displaySequence();
     }
   }
+  // sets up the grid
+  let centreW = cellWidth/4;
+  let centreH = cellHeight/4;
+  for (let y = 1; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+          
+      fill(backColor);
+      strokeWeight(4);
+      rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
+
+      // adds empty(black) guess boxes and the bottom of each larger box
+      if (ROWS-1 === submit){
+        fill(colorIn[0]);
+        rect(x*cellWidth,y*cellHeight+cellHeight*0.77, cellWidth, cellHeight*0.33);
+      }
+
+      // goes through to fill each circle with the right colour
+      for (let filled = 0; filled < colorIn.length; filled++) {
+        if (grid[y][x] === filled) {
+          fill(colorIn[filled]);
+        }
+
+        // fills with black after displaying the last color
+        else if (grid[y][x] >= colorIn.length) {
+          grid[y][x] = 0;
+        }
+        circle(x*cellWidth + centreW*2, y*cellHeight + centreH*2, centreW);
+      }
+    }
+  }
+  // only happens if user has hit submit at least once
+  if (submit < ROWS-1) {
+    displayGuess();
+  }
+}
 
 // creates 2d arrays to be filled by other variables
 function create2dArray() {
@@ -214,7 +214,7 @@ function mousePressed() {
 
 // says if inside start button
 function mouseInButton(left, right, top, bottom) {
-  return mouseX >= left && mouseX <= right/1.55 && mouseY >= top*2.85 && mouseY <= bottom*6.7;
+  return mouseX >= left && mouseX <= right/1.55 && mouseY >= top*3.3 && mouseY <= bottom*7.6;
 }
 
 function keyTyped() {
@@ -247,26 +247,26 @@ function startScreen() {
   text("Mastermind", width/2, height/5);
 
   textSize(25);
-  text("How To Play", width/2, height/2.3);
+  text("How To Play", width/2, height/2.6);
 
   textSize(15);
   textAlign(CENTER);
-  text("Start at the bottom row and click your mouse to have the circles cycle throught the 9 colours. NOTICE: In every sequence ther will be no repeating colours. Press START to begin!", 15, height/2, width-15);
+  text("Start at the bottom row and click your mouse to have the circles cycle throught the 9 colours. If the colour you guessed is in the sequence the box will have a slash through it, if it's in the right place it will be clear and if it's not included in the sequence the box will remain black. NOTICE: In every sequence ther will be no repeating colours and black will never be part of the sequence. Press START to begin!", 15, height/2.3, width-15);
 
   for (let n = 1; n < colorIn.length; n++) {
     fill(colorIn[n]);
-    circle(5+40*n, height/3.5, cellWidth/4);
+    circle(40+40*n, height/3.5, cellWidth/4);
   }
-    startX = width/3.1;
-    startY = height/1.4;
-    startSize = 150;
+  startX = width/2.8;
+  startY = height/1.4;
+  startSize = 150;
 
-    if (mouseInButton(startX, startY, startSize,startSize*0.5)) {
-      img = strtImg2;
-    }
-    else {
-      img = strtImg;
-    }
+  if (mouseInButton(startX, startY, startSize,startSize*0.5)) {
+    img = strtImg2;
+  }
+  else {
+    img = strtImg;
+  }
       
   image(img, startX, startY, startSize,startSize*0.5);
 }
