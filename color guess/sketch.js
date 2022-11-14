@@ -41,7 +41,7 @@ function preload() {
 
 function setup() {
   width = 400;
-  cnv = createCanvas(width, windowHeight);
+  cnv = createCanvas(400, 600);
   centerCanvas();
 
   cellWidth = width/COLS;
@@ -214,7 +214,7 @@ function mousePressed() {
 
 // says if inside start button
 function mouseInButton(left, right, top, bottom) {
-  return mouseX >= left && mouseX <= right/1.45 && mouseY >= top*2.65 && mouseY <= bottom*6.4;
+  return mouseX >= left && mouseX <= right/1.55 && mouseY >= top*2.85 && mouseY <= bottom*6.7;
 }
 
 function keyTyped() {
