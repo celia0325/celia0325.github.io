@@ -251,7 +251,7 @@ function startScreen() {
 
   textSize(15);
   textAlign(CENTER);
-  text("Start at the bottom row and click your mouse to have the circles cycle throught the 9 colours. If the colour you guessed is in the sequence the box will have a slash through it, if it's in the right place it will be clear and if it's not included in the sequence the box will remain black. NOTICE: In every sequence ther will be no repeating colours and black will never be part of the sequence. Press START to begin!", 15, height/2.3, width-15);
+  text("Start at the bottom row and click your mouse to have the circles cycle throught the 9 colours. Press the space bar to submit. If the colour you guessed is in the sequence the box will have a slash through it, if it's in the right place it will be clear and if it's not included in the sequence the box will remain black. NOTICE: In every sequence ther will be no repeating colours and black will never be part of the sequence. Press START to begin!", 15, height/2.3, width-15);
 
   for (let n = 1; n < colorIn.length; n++) {
     fill(colorIn[n]);
