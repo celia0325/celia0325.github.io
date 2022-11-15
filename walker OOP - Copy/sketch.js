@@ -4,9 +4,9 @@ class Walker {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.speed = 5;
+    this.speed = 10;
     this.color = "purple";
-    this.radius = 2;
+    this.radius = 5;
   }
 
   display() {
@@ -33,27 +33,30 @@ class Walker {
   }
 }
 
-let walkers = [];
+let cheeseburger;
+let hamburger;
+let fry;
+let rootbeer;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  spawnWalker();
+  cheeseburger = new Walker(width/2, height/2 );
+  hamburger = new Walker(200, 300);
+  hamburger.color = "violet";
+  fry = new Walker(width-100, height-100);
+  fry.color = "green";
+  rootbeer = new Walker (100, height-100);
+  rootbeer.color = "blue";
 }
 
 function draw() {
-  for (let i = 0; i < walkers.length; i++) {
-    walkers[i].display();
-    walkers[i].move();
-  }
-}
+  cheeseburger.display();
+  hamburger.display();
+  fry.display();
+  rootbeer.display();
 
-function spawnWalker() {
-  let cheeseburger = new Walker(random(width), random(height));
-  let someColor = color(random(255), random(255), random(255), random(255));
-  cheeseburger.color = someColor;
-  walkers.push(cheeseburger);
-}
-
-function keyPressed () {
-  spawnWalker();
+  cheeseburger.move();
+  hamburger.move();
+  fry.move();
+  rootbeer.move();
 }
