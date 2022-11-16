@@ -6,7 +6,7 @@ class Particle {
     this.y = y;
     this.dx = random(-5, 5);
     this.dy = random(-5, 5);
-    this. di = 20;
+    this. di = 5;
     this.r = random(255);
     this.g = random(255);
     this.b = random(255);
@@ -24,7 +24,11 @@ class Particle {
   display() {
     fill(this.color);
     stroke(this.color);
-    rect(this.x, this.y, this.di, this.di);
+    circle(this.x, this.y, this.di);
+  }
+
+  isDead() {
+    return this.alpha <= 0;
   }
 }
 
@@ -32,14 +36,18 @@ let fireworks = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
 }
 
 function draw() {
   background(0);
   for (let i = 0; i < fireworks.length; i++) {
     fireworks[i].update();
-    fireworks[i].display();
+    if (fireworks[i].isDead()) {
+      fireworks.splice(i, 1);
+    }
+    else {
+      fireworks[i].display();
+    }
   }
 }
 
