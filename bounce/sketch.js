@@ -13,7 +13,7 @@ class Ball {
 
   move() {
     this.x += this.dx;
-    this.y += curveTightness.dy;
+    this.y += this.dy;
 
     if (this.x + this.radius > width ||
       this.x - this.radius < 0) {
@@ -55,6 +55,8 @@ function setup() {
 }
 
 function draw() {
+  background(0);
+
   for (let i = 0; i < theCircles.length; i ++) {
     theCircles[i].move();
     for (let j = 0; j < theCircles.length; j++) {
