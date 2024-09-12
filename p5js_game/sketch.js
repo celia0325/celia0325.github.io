@@ -38,7 +38,7 @@ let x = playerSize;
 
 // end of game
 let fireworksImage;
-let winningScore = 1500;
+let winningScore = 500;
 
 function preload() {
   strtBlueImg = loadImage("startblue.png");
