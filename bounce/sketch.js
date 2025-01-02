@@ -5,10 +5,10 @@ class Ball {
   constructor(x, y) {
     this.x = x; 
     this.y = y;
-    this.radius = random(25, 100);
+    this.radius = Math.floor(random(10, 50));
     this.dx = random(-5, 5),
     this.dy = random(-5, 5),
-    this.theColor = color(random(255), random(255), random(255), random(255));
+    this.theColor = color(random(20, 250), random(20, 250), random(20, 250), random(20, 250));
   } 
 
   move() {
@@ -18,11 +18,13 @@ class Ball {
     if (this.x + this.radius > width ||
       this.x - this.radius < 0) {
       this.dx *= -1;
+      this.theColor = color(random(20, 250), random(20, 250), random(20, 250), random(20, 250));
     }
 
     //top-bottom edges
     if (this.y + this.radius > height || this.y - this.radius < 0) {
       this.dy *= -1;
+      this.theColor = color(random(20, 250), random(20, 250), random(20, 250), random(20, 250));
     }
   }
 
@@ -35,6 +37,8 @@ class Ball {
   collision(other) {
     let distanceBetween = dist(this.x, this.y, other.x, other.y);
     let radiiSum = this.radius + other.radius;
+    let new_color = color(random(220), random(220), random(220), random(220));
+    let new2 = color(random(220), random(220), random(220), random(220));
     if (distanceBetween < radiiSum) {
       let tempDx = this.dx;
       let tempDy = this.dy;
@@ -42,6 +46,8 @@ class Ball {
       this.dy = other.dy;
       other.dx = tempDx;
       other.dy = tempDy;
+      this.theColor = new_color;
+      other.theColor = new2;
     }
   }
 }
@@ -71,6 +77,14 @@ function draw() {
 }
 
 function mousePressed() {
-  let thisBall = new Ball(mouseX, mouseY);
-  theCircles.push(thisBall);
+    let thisBall = new Ball(mouseX, mouseY);
+    theCircles.push(thisBall);
+}
+
+function keyPressed() {
+  if (keyCode === 32) {
+    for (let i = 0; i < theCircles.length; i++) {
+      console.log(theCircles[i].radius)
+    }
+  }
 }
